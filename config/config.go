@@ -16,6 +16,7 @@ type Config struct {
 	OfficeLongitude   float64
 	MaxDistanceMeters float64
 	Port              string
+	CORSOrigins       []string
 }
 
 var AppConfig *Config
@@ -37,6 +38,7 @@ func LoadConfig() {
 		OfficeLongitude:   getEnvAsFloat("OFFICE_LONGITUDE", 106.7890),
 		MaxDistanceMeters: getEnvAsFloat("MAX_DISTANCE_METERS", 100),
 		Port:              getEnv("PORT", "8000"),
+		CORSOrigins:       []string{"http://localhost:52302", "https://your-frontend-domain.com"},
 	}
 }
 

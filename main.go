@@ -6,9 +6,9 @@ import (
 
 	"glosindo-backend-go/config"
 	"glosindo-backend-go/database"
+	"glosindo-backend-go/middleware"
 	"glosindo-backend-go/routes"
 
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -27,12 +27,7 @@ func main() {
 	router := gin.Default()
 
 	// CORS Middleware
-	router.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:52302", "https://your-frontend-domain.com"},
-		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
-		AllowCredentials: true,
-	}))
+	router.Use(middleware.CORSMiddleware())
 
 	// Setup routes
 	routes.SetupRoutes(router)
