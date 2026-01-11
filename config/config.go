@@ -26,7 +26,7 @@ func LoadConfig() {
 		log.Println("No .env file found, using environment variables")
 	}
 
-	dbURL := getEnv("DATABASE_URL", "postgresql://postgres:luVrWlXxolHaPBGmPqUdDSuXyaijkAMW@yamanote.proxy.rlwy.net:35622/railway")
+	dbURL := getEnv("DATABASE_URL", "postgresql://postgres:luVrWlXxolHaPBGmPqUdDSuXyaijkAMW@postgres.railway.internal:5432/railway")
 	log.Printf("📋 Database URL configured (masked for security)")
 
 	AppConfig = &Config{
