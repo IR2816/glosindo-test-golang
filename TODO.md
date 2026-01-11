@@ -1,0 +1,5 @@
+- [x] Update go.mod to use Go version 1.24 (latest available in Docker images)
+- [x] Fix Dockerfile to use golang:1.24-alpine and remove duplicate content
+- [ ] Test the Docker build to ensure it works
+- [x] Fill models/presensi.go with the Presensi struct based on database schema
+- [x] Prepare project for Railway.com deployment (added .gitignore, verified PORT and DATABASE_URL usage)

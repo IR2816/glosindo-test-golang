@@ -1,0 +1,61 @@
+package config
+
+import (
+	"log"
+	"os"
+	"strconv"
+
+	"github.com/joho/godotenv"
+)
+
+type Config struct {
+	DatabaseURL        string
+	JWTSecret          string
+	JWTExpireHours     int
+	OfficeLatitude     float64
+	OfficeLongitude    float64
+	MaxDistanceMeters  float64
+	Port               string
+}
+
+var AppConfig *Config
+
+func LoadConfig() {
+	// Load .env file
+	if err := godotenv.Load(); err != nil {
+		log.Println("No .env file found, using environment variables")
+	}
+
+	AppConfig = &Config{
+		DatabaseURL:        getEnv("DATABASE_URL", "postgresql://postgres:password@localhost:5432/glosindo_db"),
+		JWTSecret:          getEnv("JWT_SECRET", "glosindo_secret_key"),
+		JWTExpireHours:     getEnvAsInt("JWT_EXPIRE_HOURS", 168),
+		OfficeLatitude:     getEnvAsFloat("OFFICE_LATITUDE", -6.5947),
+		OfficeLongitude:    getEnvAsFloat("OFFICE_LONGITUDE", 106.7890),
+		MaxDistanceMeters:  getEnvAsFloat("MAX_DISTANCE_METERS", 100),
+		Port:               getEnv("PORT", "8000"),
+	}
+}
+
+func getEnv(key, defaultValue string) string {
+	if value := os.Getenv(key); value != "" {
+		return value
+	}
+	return defaultValue
+}
+
+func getEnvAsInt(key string, defaultValue int) int {
+	valueStr := getEnv(key, "")
+	if value, err := strconv.Atoi(valueStr); err == nil {
+		return value
+	}
+	return defaultValue
+}
+
+func getEnvAsFloat(key string, defaultValue float64) float64 {
+	valueStr := getEnv(key, "")
+	if value, err := strconv.ParseFloat(valueStr, 64); err == nil {
+		return value
+	}
+	return defaultValue
+}
