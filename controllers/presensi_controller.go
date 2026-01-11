@@ -149,7 +149,11 @@ func GetTodayPresensi(c *gin.Context) {
 }
 
 func GetPresensiHistory(c *gin.Context) {
-	currentUser, _ := c.Get("user")
+	currentUser, exists := c.Get("user")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
 	user := currentUser.(models.User)
 
 	limit := 30
@@ -158,12 +162,17 @@ func GetPresensiHistory(c *gin.Context) {
 	}
 
 	var presensiList []models.Presensi
-	database.DB.Where("user_id = ?", user.ID).
+	if err := database.DB.Where("user_id = ?", user.ID).
 		Order("date DESC").
 		Limit(limit).
-		Find(&presensiList)
+		Find(&presensiList).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch presensi history"})
+		return
+	}
 
-	c.JSON(http.StatusOK, presensiList)
+	c.JSON(http.StatusOK, gin.H{
+		"data": presensiList,
+	})
 }
 
 func GetPresensiStats(c *gin.Context) {
