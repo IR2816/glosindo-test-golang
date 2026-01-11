@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/joho/godotenv"
 )
@@ -38,7 +39,7 @@ func LoadConfig() {
 		OfficeLongitude:   getEnvAsFloat("OFFICE_LONGITUDE", 106.7890),
 		MaxDistanceMeters: getEnvAsFloat("MAX_DISTANCE_METERS", 100),
 		Port:              getEnv("PORT", "8000"),
-		CORSOrigins:       []string{"http://localhost:52302", "https://your-frontend-domain.com"},
+		CORSOrigins:       getEnvAsSlice("CORS_ORIGINS", []string{"http://localhost:52302", "https://your-frontend-domain.com"}),
 	}
 }
 
@@ -61,6 +62,21 @@ func getEnvAsFloat(key string, defaultValue float64) float64 {
 	valueStr := getEnv(key, "")
 	if value, err := strconv.ParseFloat(valueStr, 64); err == nil {
 		return value
+	}
+	return defaultValue
+}
+
+func getEnvAsSlice(key string, defaultValue []string) []string {
+	valueStr := getEnv(key, "")
+	if valueStr != "" {
+		// Simple split by comma, trim spaces
+		var result []string
+		for _, s := range strings.Split(valueStr, ",") {
+			if trimmed := strings.TrimSpace(s); trimmed != "" {
+				result = append(result, trimmed)
+			}
+		}
+		return result
 	}
 	return defaultValue
 }
