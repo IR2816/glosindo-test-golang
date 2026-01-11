@@ -37,6 +37,7 @@ func AuthMiddleware() gin.HandlerFunc {
 		}
 
 		c.Set("user", user)
+		c.Set("session_id", claims.SessionID) // ← BARU: Store session ID
 		c.Next()
 	}
 }

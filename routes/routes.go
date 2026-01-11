@@ -25,6 +25,8 @@ func SetupRoutes(router *gin.Engine) {
 			// Auth
 			protected.GET("/auth/me", controllers.GetMe)
 			protected.PUT("/auth/me", controllers.UpdateMe)
+			protected.POST("/auth/logout", controllers.Logout)               // ← BARU
+			protected.GET("/auth/login-history", controllers.GetLoginHistory) // ← BARU
 
 			// Presensi
 			presensi := protected.Group("/presensi")
@@ -34,6 +36,24 @@ func SetupRoutes(router *gin.Engine) {
 				presensi.GET("/today", controllers.GetTodayPresensi)
 				presensi.GET("/history", controllers.GetPresensiHistory)
 				presensi.GET("/stats", controllers.GetPresensiStats)
+			}
+			// Tickets
+			tickets := protected.Group("/tickets")
+			{
+				tickets.GET("", controllers.GetTickets)
+				tickets.GET("/stats", controllers.GetTicketStats)
+				tickets.GET("/categories", controllers.GetTicketCategories)
+				tickets.GET("/:id", controllers.GetTicketDetail)
+				tickets.POST("", controllers.CreateTicket)
+				tickets.PUT("/:id/status", controllers.UpdateTicketStatus)
+			}
+
+			// Kasbon
+			kasbon := protected.Group("/kasbon")
+			{
+				kasbon.GET("", controllers.GetKasbon)
+				kasbon.GET("/stats", controllers.GetKasbonStats)
+				kasbon.POST("", controllers.CreateKasbon)
 			}
 		}
 	}
