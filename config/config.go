@@ -9,13 +9,13 @@ import (
 )
 
 type Config struct {
-	DatabaseURL        string
-	JWTSecret          string
-	JWTExpireHours     int
-	OfficeLatitude     float64
-	OfficeLongitude    float64
-	MaxDistanceMeters  float64
-	Port               string
+	DatabaseURL       string
+	JWTSecret         string
+	JWTExpireHours    int
+	OfficeLatitude    float64
+	OfficeLongitude   float64
+	MaxDistanceMeters float64
+	Port              string
 }
 
 var AppConfig *Config
@@ -26,14 +26,17 @@ func LoadConfig() {
 		log.Println("No .env file found, using environment variables")
 	}
 
+	dbURL := getEnv("DATABASE_URL", "postgresql://postgres:luVrWlXxolHaPBGmPqUdDSuXyaijkAMW@yamanote.proxy.rlwy.net:35622/railway")
+	log.Printf("📋 Database URL configured (masked for security)")
+
 	AppConfig = &Config{
-		DatabaseURL:        getEnv("DATABASE_URL", "postgresql://postgres:password@localhost:5432/glosindo_db"),
-		JWTSecret:          getEnv("JWT_SECRET", "glosindo_secret_key"),
-		JWTExpireHours:     getEnvAsInt("JWT_EXPIRE_HOURS", 168),
-		OfficeLatitude:     getEnvAsFloat("OFFICE_LATITUDE", -6.5947),
-		OfficeLongitude:    getEnvAsFloat("OFFICE_LONGITUDE", 106.7890),
-		MaxDistanceMeters:  getEnvAsFloat("MAX_DISTANCE_METERS", 100),
-		Port:               getEnv("PORT", "8000"),
+		DatabaseURL:       dbURL,
+		JWTSecret:         getEnv("JWT_SECRET", "glosindo_secret_key"),
+		JWTExpireHours:    getEnvAsInt("JWT_EXPIRE_HOURS", 168),
+		OfficeLatitude:    getEnvAsFloat("OFFICE_LATITUDE", -6.5947),
+		OfficeLongitude:   getEnvAsFloat("OFFICE_LONGITUDE", 106.7890),
+		MaxDistanceMeters: getEnvAsFloat("MAX_DISTANCE_METERS", 100),
+		Port:              getEnv("PORT", "8000"),
 	}
 }
 
