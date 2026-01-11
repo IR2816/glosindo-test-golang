@@ -28,7 +28,7 @@ func LoadConfig() {
 		log.Println("No .env file found, using environment variables")
 	}
 
-	dbURL := getEnv("DATABASE_URL", "postgresql://postgres:luVrWlXxolHaPBGmPqUdDSuXyaijkAMW@postgres.railway.internal:5432/railway")
+	dbURL := getEnv("DATABASE_URL", "sqlite:./glosindo.db")
 	log.Printf("📋 Database URL configured (masked for security)")
 
 	AppConfig = &Config{
